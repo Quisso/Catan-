@@ -1,21 +1,3 @@
-enum Tile { hills , forest , mountain , fields , pasture , desert };
-enum Resource { brick , wood , ore , wheat , sheep , random };
-enum Color { red , white , orange , blue};
-
-type settlement = {
-    color: Player
-    is_city: boolean
-}
-type node = {
-    resources: Resource[]
-    edges: edge[]
-    settlement: settlement
-}
-type edge = {
-    road: Player
-    nodes: node[]
-}
-
 function randomize(arr: any[], size: number): any[]{
     return arr.map((e:any, i:number, a:any[])=>{
         let r = Math.random()*size;
