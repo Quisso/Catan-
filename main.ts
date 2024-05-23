@@ -1,3 +1,6 @@
+import type { settlement , node , edge } from "catan.d.ts";
+import type { Component } from "react";
+import type { Component } from "react";
 function randomize(arr: any[], size: number): any[]{
     return arr.map((e:any, i:number, a:any[])=>{
         let r = Math.random()*size;
@@ -17,7 +20,7 @@ class Board {
     */
    
     tile_amt = 19;
-    terrain_layout: Tile[];
+    terrain_layout: { Tile[], number[] };
     token_layout: number[];
     robber: number;
     corners_amt = 54;
@@ -33,6 +36,9 @@ class Board {
         this.terrain_layout = randomize(this.terrain_layout, this.tile_amt)
         this.token_layout = randomize(this.token_layout, this.tile_amt)
         let rows = [7, 9, 11, 11, 9, 7]
+        for(let i = 0; i<this.tile_amt; i++){
+
+        }
         this.game_state.nodes.map((e:node, i:number)=>{
             e.resources[].add
         })
