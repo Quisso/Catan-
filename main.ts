@@ -78,6 +78,12 @@ class Board {
 // } 
 
 //card effect
+type card = {
+    name:string;
+    description: string;
+    function: () => void;
+}
+
 let deck = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
 
 class developement_Cards {
@@ -92,12 +98,14 @@ class developement_Cards {
         //randomizer of numbers that represent cards
         //push into the array
 
-        for(let i = 0, cards = 0; i < deck.length && cards <= nums; i++, cards++){
-            
+        randomize(deck, deck.length);
+        for(let i = 0; i < nums; i++){
+            this.cardsInHand_developement.push(deck[i]);
+            deck.pop();
         }
     }
 
-    removeCard(index: number): boolean {
+    remove_developementcard(index: number): boolean {
         if (index !== -1) {
             this.cardsInHand_developement.splice(index, 1);
             return true;
