@@ -1,0 +1,31 @@
+{
+  "name": "catan",
+  "version": "1.0.0",
+  "description": "A software implementation of the game Settlers of Catan to potentially be played online or with AI.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quisso/Catan-.git"
+  },
+  "author": "Quaid Johnson, Teron Rowe, Fuming Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Quisso/Catan-/issues"
+  },
+  "homepage": "https://github.com/Quisso/Catan-#readme",
+  "devDependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/preset-env": "^7.24.6",
+    "@babel/preset-typescript": "^7.24.6",
+    "@types/jest": "^29.5.12",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
