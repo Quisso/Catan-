@@ -1,12 +1,7 @@
-export enum Hex { hills , forest , mountain , fields , pasture , desert };
+export enum Tile { hills , forest , mountain , fields , pasture , desert };
 export enum Resource { brick , wood , ore , wheat , sheep , random };
 export enum Color { red , white , orange , blue};
 
-export type tile = {
-    hex: Hex
-    resource: Resource
-    token: number
-}
 export type settlement = {
     color: Color
     is_city: boolean
