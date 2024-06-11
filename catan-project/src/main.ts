@@ -15,6 +15,7 @@ export type node = {
     settlement: settlement | null
     tiles: tile[]
     edges: edge[]
+    index: number
 }
 export type edge = {
     road: Color | null//player
@@ -81,6 +82,8 @@ export class Board{
                 this.tile_layout.push({
                     hex: this.tile_config[i].hex,
                     resource: production_conversion(this.tile_config[i].hex) as Resource,
+                    token: -1,
+                    nodes: [],
                 } as tile)
             }
         }
@@ -100,6 +103,7 @@ export class Board{
                 settlement: null,
                 tiles: [],
                 edges: [],
+                index: i,
             }
         }
         for(let i = 0; i<this.edge_amt; i++){
@@ -113,7 +117,7 @@ export class Board{
         this.tile_layout.map((t, ti)=>{
             let nodes = this.getTileNodes(ti).map(ni=>this.game_state.nodes[ni])
             nodes.map(n=>n.tiles.push(t))
-            return nodes
+            t.nodes = nodes
         })
 
 
@@ -147,8 +151,8 @@ export class Board{
         let nIndex:number[] = []
         let node_rows = [7, 9, 11, 11, 9, 7]
         let tile_rows = [3, 4, 5, 4, 3] 
-        let row = this.getRow(tIndex, tile_rows)
-        let col = this.getCol(tIndex, tile_rows)*2
+        let row = this?.getRow(tIndex, tile_rows)
+        let col = this?.getCol(tIndex, tile_rows)*2
 
         let topRowOffset = row>Math.floor(tile_rows.length/2) ? 1:0
         let bottomRowOffset = row<Math.floor(tile_rows.length/2) ? 1:0
@@ -168,5 +172,5 @@ for(let i = 0; i<19; i++){
     arr[i] = board.getTileNodes(i)
 }
 //console.log(arr)
-console.log(board.tile_layout.map(t=>t.nodes))
+console.log(board.tile_layout.map(t=>t.nodes.map(n=>n.index)))
 //console.log(board.game_state.nodes.map((n, i)=>i+" : "+n.tiles.map(t=>board.tile_layout.indexOf(t))))

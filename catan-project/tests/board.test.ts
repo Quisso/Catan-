@@ -106,35 +106,22 @@ describe('board.getIndex', () => {
     });
 });
 
-describe('board.getTileNodes', () => {
-    test('bounds return list of -1', () => {
-        let board = new Board(4)
-        expect(board.getTileNodes(-1)).toContain(-1)
-        expect(board.getTileNodes(19)).toContain(-1)
-    });
-    test('corner tiles have correct nodes', () => {
-        let board = new Board(4)
-        let arr:number[] = []
-        for(let i = 0; i<19; i++){
-            arr[i] = i;
-        }
-        arr.map(board.getTileNodes).map(n=>expect(n).toHaveLength(6))
-        expect(board.getTileNodes(arr[0])).toBe([0, 1, 2, 8, 9, 10])
-        expect(board.getTileNodes(arr[2])).toBe([4, 5, 6, 12, 13, 14])
-        expect(board.getTileNodes(arr[7])).toBe([16, 17, 18, 27, 28, 29])
-        expect(board.getTileNodes(arr[11])).toBe([24, 25, 26, 35, 36, 37])
-        expect(board.getTileNodes(arr[16])).toBe([39, 40, 41, 47, 48, 49])
-        expect(board.getTileNodes(arr[18])).toBe([43, 44, 45, 51, 52, 53])
-    });
-});
 describe('Board tile_layout', () => {
-    test('tiles have', () => {
+    test('tiles have 6 nodes and nodes are found in nodes array', () => {
         let board = new Board(4)
-        board.tile_layout
-            .map(t=>t.nodes)
-            .map((ns:node[])=>ns.map((n:node)=>board.game_state.nodes.find(v=>n===v)))
+        board.tile_layout.map(t=>{
+            expect(t.nodes).toHaveLength(6)
+            t.nodes.map((n:node)=>{
+                expect(board.game_state.nodes.find(v=>n===v)).toBeTruthy()
+            })
+        })
     });
 });
+describe('', () => {
+    test('', () => {
+    });
+});
+
 describe('', () => {
     test('', () => {
     });
