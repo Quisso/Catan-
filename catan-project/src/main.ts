@@ -62,10 +62,6 @@ export class Board{
     harbor_amt = 18;
     harbors = [0, 1, 3, 4, 7, 14, 15, 17, 26, 28, 37, 38, 45, 46, 47, 48, 50, 51];
 
-
-    
-    node_rows = [7, 9, 11, 11, 9, 7]
-    tile_rows = [3, 4, 5, 4, 3]
     public constructor(player_amt: number) {
         this.player_amt = player_amt;
         
@@ -114,12 +110,13 @@ export class Board{
         }
 
         //tiles and nodes linkage
-        this.tile_layout.map((t, ti)=>
-            this.getTileNodes(ti)
-                .map(ni=>this.game_state.nodes[ni])
-        )
-        //nodes and edges linkage
-        //this.game_state.nodes.map() 
+        this.tile_layout.map((t, ti)=>{
+            let nodes = this.getTileNodes(ti).map(ni=>this.game_state.nodes[ni])
+            nodes.map(n=>n.tiles.push(t))
+            return nodes
+        })
+
+
     }
     getRow(index:number, row_amts:number[]):number{
         if(index<0) return -1
@@ -138,7 +135,7 @@ export class Board{
         return -1;
     }
     getIndex(row:number, col:number, row_amts:number[]):number{
-        if(row<0||col<0) return -1
+        if(row<0||col<0||row>=row_amts.length||col>=row_amts[row]) return -1
         return row_amts.reduce((acc, e)=>{
             if(row === 0) acc+=col
             if(row > 0) acc+=e
@@ -164,5 +161,12 @@ export class Board{
         }
         return nIndex;
     }
-    
 }
+let board = new Board(4)
+let arr = []
+for(let i = 0; i<19; i++){
+    arr[i] = board.getTileNodes(i)
+}
+//console.log(arr)
+console.log(board.tile_layout.map(t=>t.nodes))
+//console.log(board.game_state.nodes.map((n, i)=>i+" : "+n.tiles.map(t=>board.tile_layout.indexOf(t))))

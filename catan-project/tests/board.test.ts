@@ -1,4 +1,4 @@
-import { shuffleArray , Board } from "../../dist/main.js"
+import { shuffleArray , Board , node , tile} from "../src/main.ts"
 
 describe('randomize', () => {
     test('randomized simple array', () => {
@@ -127,12 +127,12 @@ describe('board.getTileNodes', () => {
         expect(board.getTileNodes(arr[18])).toBe([43, 44, 45, 51, 52, 53])
     });
 });
-describe('', () => {
-    test('', () => {
+describe('Board tile_layout', () => {
+    test('tiles have', () => {
         let board = new Board(4)
         board.tile_layout
             .map(t=>t.nodes)
-            .map(ns=>ns.map(n=>board.game_state.nodes.find(v=>n===v)))
+            .map((ns:node[])=>ns.map((n:node)=>board.game_state.nodes.find(v=>n===v)))
     });
 });
 describe('', () => {
