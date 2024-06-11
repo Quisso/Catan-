@@ -106,6 +106,22 @@ describe('board.getIndex', () => {
     });
 });
 
+describe('Board getTileNodes', () => {
+    test('indices are sorted so that they are circular', () => {
+        let board = new Board(4)
+        for(let i=0; i<19; i++){
+            let nodes = board.getTileNodes(i)
+            let n =0
+            for(;n<nodes.length/2; n++){
+                expect(nodes[n]).toBeLessThan(nodes[n+1])
+            }
+            for(;n<nodes.length; n++){
+                expect(nodes[n]).toBeGreaterThan(nodes[((n+1)%nodes.length)])
+            }
+        }
+    });
+});
+
 describe('Board tile_layout', () => {
     test('tiles have 6 nodes and nodes are found in nodes array', () => {
         let board = new Board(4)
@@ -117,8 +133,63 @@ describe('Board tile_layout', () => {
         })
     });
 });
-describe('', () => {
-    test('', () => {
+describe('board makeEdge', () => {
+    test('makeEdge instantiates both nodes', () => {
+        let board = new Board(4)
+        let n1 = {} as node
+        n1.edges = []
+        let n2 = {} as node
+        n2.edges = []
+        board.makeEdge(n1, n2)
+        expect(n1.edges[0]).toStrictEqual(n2.edges[0])
+    });
+    test('makeEdge makes a new edge', () => {
+        let board = new Board(4)
+        let n1 = {} as node
+        n1.edges = []
+        let n2 = {} as node
+        n2.edges = []
+        expect(board.makeEdge(n1, n2)).not.toBeNull()
+        expect(n1.edges[0].road).toEqual(null)
+        expect(n2.edges[0].road).toEqual(null)
+        expect(n1.edges[0].nodes).toContain(n1)
+        expect(n1.edges[0].nodes).toContain(n2)
+        expect(n2.edges[0].nodes).toContain(n1)
+        expect(n2.edges[0].nodes).toContain(n2)
+    });
+    test('makeEdge does not make an edge if nodes already have an edge', () => {
+        let board = new Board(4)
+        let n1 = {} as node
+        n1.edges = []
+        let n2 = {} as node
+        n2.edges = []
+        let n3 = {} as node
+        n3.edges = []
+        board.makeEdge(n1, n2)
+        board.makeEdge(n2, n3)
+        board.makeEdge(n3, n1)
+        expect(board.makeEdge(n2, n1)).toEqual(null)
+        expect(board.makeEdge(n3, n2)).toEqual(null)
+        expect(board.makeEdge(n1, n3)).toEqual(null)
+        expect(n1.edges).toHaveLength(2)
+        expect(n2.edges).toHaveLength(2)
+        expect(n3.edges).toHaveLength(2)
+    });
+});
+
+describe('board game_state', () => {
+    test('game_state has nodes and edges with correct linkages to each other', () => {
+        let board = new Board(4)
+        expect(board.game_state.nodes).toHaveLength(54)
+        expect(board.game_state.edges).toHaveLength(72)
+        for(let node of board.game_state.nodes){
+            expect(node.edges.length).toBeGreaterThanOrEqual(2)
+            expect(node.edges.length).toBeLessThanOrEqual(3)
+        }
+        for(let edge of board.game_state.edges){
+            expect(edge.nodes).toHaveLength(2)
+        }
+
     });
 });
 

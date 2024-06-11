@@ -53,11 +53,14 @@ export class Board{
     ];
     tile_layout: tile[];
     token_layout: number[];
+    tile_rows = [3, 4, 5, 4, 3] 
     //robber: number;
 
     node_amt = 54;
     edge_amt = 72;
     game_state: {nodes: node[], edges: edge[]};
+    node_rows = [7, 9, 11, 11, 9, 7]
+    
     player_amt: number;
 
     harbor_amt = 18;
@@ -96,8 +99,7 @@ export class Board{
         })
 
         //game state init
-        this.game_state = {nodes: new Array<node>(this.node_amt), 
-                           edges: new Array<edge>(this.edge_amt)}
+        this.game_state = {nodes: [], edges: []}
         for(let i = 0; i<this.node_amt; i++){
             this.game_state.nodes[i] = {
                 settlement: null,
@@ -106,21 +108,31 @@ export class Board{
                 index: i,
             }
         }
-        for(let i = 0; i<this.edge_amt; i++){
-            this.game_state.edges[i] = {
-                road: null,
-                nodes: [],
+
+        //inkages
+        this.tile_layout.forEach((t, ti)=>{
+            //node and edge linkage
+            let nodes = this.getTileNodes(ti)
+            for(let n = 0; n<nodes.length; n++){
+                let edge = this.makeEdge(this.game_state.nodes[nodes[n]], 
+                                         this.game_state.nodes[nodes[(n+1)%6]])
+                edge !== null ? this.game_state.edges.push(edge):0
             }
-        }
-
-        //tiles and nodes linkage
-        this.tile_layout.map((t, ti)=>{
-            let nodes = this.getTileNodes(ti).map(ni=>this.game_state.nodes[ni])
-            nodes.map(n=>n.tiles.push(t))
-            t.nodes = nodes
+            //tiles and nodes linkage
+            t.nodes = nodes.map(ni=>this.game_state.nodes[ni])
+            t.nodes.forEach(n=>n.tiles.push(t))
         })
-
-
+    }
+    makeEdge(n1:node, n2:node):edge|null{
+        if(n1.edges.some(e=>e.nodes.find(v=>v===n2)!== undefined)) return null
+        if(n1.edges.length > 2 || n2.edges.length > 2) throw console.error("too many edges");
+        let edge:edge = {
+            road: null,
+            nodes: [n1, n2],
+        }
+        n1.edges.push(edge)
+        n2.edges.push(edge)
+        return edge
     }
     getRow(index:number, row_amts:number[]):number{
         if(index<0) return -1
@@ -149,22 +161,21 @@ export class Board{
     }
     getTileNodes(tIndex:number): number[]{
         let nIndex:number[] = []
-        let node_rows = [7, 9, 11, 11, 9, 7]
-        let tile_rows = [3, 4, 5, 4, 3] 
-        let row = this?.getRow(tIndex, tile_rows)
-        let col = this?.getCol(tIndex, tile_rows)*2
+        let row = this.getRow(tIndex, this.tile_rows)
+        let col = this.getCol(tIndex, this.tile_rows)*2
 
-        let topRowOffset = row>Math.floor(tile_rows.length/2) ? 1:0
-        let bottomRowOffset = row<Math.floor(tile_rows.length/2) ? 1:0
+        let topRowOffset = row>Math.floor(this.tile_rows.length/2) ? 1:0
+        let bottomRowOffset = row<Math.floor(this.tile_rows.length/2) ? 1:0
         
         for(let c = col; c<col+3; c++){
-            nIndex.push(this.getIndex(row, c+topRowOffset, node_rows))
+            nIndex.push(this.getIndex(row, c+topRowOffset, this.node_rows))
         }
-        for(let c = col; c<col+3; c++){
-            nIndex.push(this.getIndex(row+1, c+bottomRowOffset, node_rows))
+        for(let c = col+2; c>=col; c--){
+            nIndex.push(this.getIndex(row+1, c+bottomRowOffset, this.node_rows))
         }
         return nIndex;
     }
+    
 }
 let board = new Board(4)
 let arr = []

@@ -58,10 +58,12 @@ class Board {
     ];
     tile_layout;
     token_layout;
+    tile_rows = [3, 4, 5, 4, 3];
     //robber: number;
     node_amt = 54;
     edge_amt = 72;
     game_state;
+    node_rows = [7, 9, 11, 11, 9, 7];
     player_amt;
     harbor_amt = 18;
     harbors = [0, 1, 3, 4, 7, 14, 15, 17, 26, 28, 37, 38, 45, 46, 47, 48, 50, 51];
@@ -83,6 +85,8 @@ class Board {
                 this.tile_layout.push({
                     hex: this.tile_config[i].hex,
                     resource: production_conversion(this.tile_config[i].hex),
+                    token: -1,
+                    nodes: [],
                 });
             }
         }
@@ -93,13 +97,14 @@ class Board {
             e.token = this.token_layout[i];
         });
         //game state init
-        this.game_state = { nodes: new Array(this.node_amt),
-            edges: new Array(this.edge_amt) };
+        this.game_state = { nodes: [],
+            edges: [] };
         for (let i = 0; i < this.node_amt; i++) {
             this.game_state.nodes[i] = {
                 settlement: null,
                 tiles: [],
                 edges: [],
+                index: i,
             };
         }
         for (let i = 0; i < this.edge_amt; i++) {
@@ -108,14 +113,29 @@ class Board {
                 nodes: [],
             };
         }
-        //tiles and nodes linkage
-        this.tile_layout.map((t, ti) => {
-            let nodes = this.getTileNodes(ti).map(ni => this.game_state.nodes[ni]);
-            nodes.map(n => n.tiles.push(t));
-            return nodes;
+        //inkages
+        this.tile_layout.forEach((t, ti) => {
+            //node and edge linkage
+            let nodes = this.getTileNodes(ti);
+            for (let n = 0; n < nodes.length; n++)
+                this.makeEdge(this.game_state.nodes[nodes[n]], this.game_state.nodes[nodes[(n + 1) % 6]]);
+            //tiles and nodes linkage
+            t.nodes = nodes.map(ni => this.game_state.nodes[ni]);
+            t.nodes.forEach(n => n.tiles.push(t));
         });
-        //nodes and edges linkage
-        //this.game_state.nodes.map() 
+    }
+    makeEdge(n1, n2) {
+        if (n1.edges.some(e => e.nodes.find(v => v === n2) !== undefined))
+            return -1;
+        if (n1.edges.length > 2 || n2.edges.length > 2)
+            throw console.error("too many edges");
+        let edge = {
+            road: null,
+            nodes: [n1, n2],
+        };
+        n1.edges.push(edge);
+        n2.edges.push(edge);
+        return this.game_state.edges.push(edge);
     }
     getRow(index, row_amts) {
         if (index < 0)
@@ -151,17 +171,15 @@ class Board {
     }
     getTileNodes(tIndex) {
         let nIndex = [];
-        let node_rows = [7, 9, 11, 11, 9, 7];
-        let tile_rows = [3, 4, 5, 4, 3];
-        let row = this.getRow(tIndex, tile_rows);
-        let col = this.getCol(tIndex, tile_rows) * 2;
-        let topRowOffset = row > Math.floor(tile_rows.length / 2) ? 1 : 0;
-        let bottomRowOffset = row < Math.floor(tile_rows.length / 2) ? 1 : 0;
+        let row = this.getRow(tIndex, this.tile_rows);
+        let col = this.getCol(tIndex, this.tile_rows) * 2;
+        let topRowOffset = row > Math.floor(this.tile_rows.length / 2) ? 1 : 0;
+        let bottomRowOffset = row < Math.floor(this.tile_rows.length / 2) ? 1 : 0;
         for (let c = col; c < col + 3; c++) {
-            nIndex.push(this.getIndex(row, c + topRowOffset, node_rows));
+            nIndex.push(this.getIndex(row, c + topRowOffset, this.node_rows));
         }
-        for (let c = col; c < col + 3; c++) {
-            nIndex.push(this.getIndex(row + 1, c + bottomRowOffset, node_rows));
+        for (let c = col + 2; c >= col; c--) {
+            nIndex.push(this.getIndex(row + 1, c + bottomRowOffset, this.node_rows));
         }
         return nIndex;
     }
@@ -172,6 +190,6 @@ let arr = [];
 for (let i = 0; i < 19; i++) {
     arr[i] = board.getTileNodes(i);
 }
-console.log(arr);
-console.log(board.tile_layout.map(t => t.nodes));
-console.log(board.game_state.nodes.map(n => n.tiles));
+//console.log(arr)
+console.log(board.tile_layout.map(t => t.nodes.map(n => n.index)));
+//console.log(board.game_state.nodes.map((n, i)=>i+" : "+n.tiles.map(t=>board.tile_layout.indexOf(t))))
