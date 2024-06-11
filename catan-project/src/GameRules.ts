@@ -6,6 +6,7 @@ class GameRules{
     dice_2 = 0;
     
     
+    
     checkIntersection(tile:number[],tile_nodes:node[]): boolean{
         let node:node;
         return tile.some(e => tile_nodes[e].settlement !== null)
@@ -74,9 +75,27 @@ class GameRules{
 
     }
 
-    trade(){
+    trade(_player_turn){
+
 
     }
+
+    buildRoad() {
+        const board = new Board(3);
+
+        if(this.checkIntersection(input,board.getTileNodes)){
+            
+        }
+
+        
+        
+    }
+
+     \
+
+    }
+
+    
 
 
 
