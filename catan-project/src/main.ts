@@ -67,17 +67,17 @@ export class Board{
     player_amt: number;
 
     harbor_amt = 18;
-    harbor_nodes: readonly Record<number, Resource>[] = [
-        {0: Resource.random}, {1: Resource.random},
-        {3: Resource.sheep}, {4: Resource.sheep},
-        {7: Resource.random}, {14: Resource.random},
-        {15: Resource.random}, {17: Resource.random},
-        {26: Resource.brick}, {28: Resource.brick},
-        {37: Resource.wood}, {38: Resource.wood},
-        {45: Resource.random}, {46: Resource.random},
-        {47: Resource.wheat}, {48: Resource.wheat},
-        {50: Resource.ore}, {51: Resource.ore},
-    ]
+    harbor_nodes:  Record<number, Resource> = {
+        0: Resource.random, 1: Resource.random,
+        3: Resource.sheep, 4: Resource.sheep,
+        7: Resource.random, 14: Resource.random,
+        15: Resource.random, 17: Resource.random,
+        26: Resource.brick, 28: Resource.brick,
+        37: Resource.wood, 38: Resource.wood,
+        45: Resource.random, 46: Resource.random,
+        47: Resource.wheat, 48: Resource.wheat,
+        50: Resource.ore, 51: Resource.ore,
+    }
 
     public constructor(player_amt: number) {
         this.player_amt = player_amt;
@@ -198,7 +198,7 @@ for(let i = 0; i<19; i++){
     arr[i] = board.getTileNodes(i)
 }
 //console.log(arr)
-console.log(board.tile_layout.map(t=>t.nodes.map(n=>n.index)))
+console.log(board.tile_layout.map(t=>t.nodes.map(n=>n.harbor)))
 //console.log(board.game_state.nodes.map((n, i)=>i+" : "+n.tiles.map(t=>board.tile_layout.indexOf(t))))
 for(let i = 0; i<52; i++)
     console.log(board.harbor_nodes[i])
