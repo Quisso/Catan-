@@ -13,6 +13,7 @@ export type settlement = {
 }
 export type node = {
     settlement: settlement | null
+    harbor: Resource | null
     tiles: tile[]
     edges: edge[]
     index: number
@@ -28,9 +29,11 @@ export function shuffleArray<T>(array: T[]): T[] {
         .map(({ value }) => value);
 }
 
-function production_conversion(prod: Hex | Resource): Hex | Resource {
-    return prod as number;
-}   
+function production_conversion(prod: Hex | Resource ): Hex | Resource {
+    return Object.values(Hex).includes(prod as Hex) ? 
+        prod = prod as number as Resource: 
+        prod = prod as number as Hex
+}  
 export class Board{
 
     /* (harbor)
@@ -64,7 +67,17 @@ export class Board{
     player_amt: number;
 
     harbor_amt = 18;
-    harbors = [0, 1, 3, 4, 7, 14, 15, 17, 26, 28, 37, 38, 45, 46, 47, 48, 50, 51];
+    harbor_nodes: readonly Record<number, Resource>[] = [
+        {0: Resource.random}, {1: Resource.random},
+        {3: Resource.sheep}, {4: Resource.sheep},
+        {7: Resource.random}, {14: Resource.random},
+        {15: Resource.random}, {17: Resource.random},
+        {26: Resource.brick}, {28: Resource.brick},
+        {37: Resource.wood}, {38: Resource.wood},
+        {45: Resource.random}, {46: Resource.random},
+        {47: Resource.wheat}, {48: Resource.wheat},
+        {50: Resource.ore}, {51: Resource.ore},
+    ]
 
     public constructor(player_amt: number) {
         this.player_amt = player_amt;
@@ -84,7 +97,7 @@ export class Board{
             for(let j = 0; j < this.tile_config[i].amt; j++){
                 this.tile_layout.push({
                     hex: this.tile_config[i].hex,
-                    resource: production_conversion(this.tile_config[i].hex) as Resource,
+                    resource: production_conversion(this.tile_config[i].hex),
                     token: -1,
                     nodes: [],
                 } as tile)
@@ -103,13 +116,14 @@ export class Board{
         for(let i = 0; i<this.node_amt; i++){
             this.game_state.nodes[i] = {
                 settlement: null,
+                harbor: i in this.harbor_nodes ? this.harbor_nodes[i] : null,
                 tiles: [],
                 edges: [],
                 index: i,
             }
         }
 
-        //inkages
+        //linkages
         this.tile_layout.forEach((t, ti)=>{
             //node and edge linkage
             let nodes = this.getTileNodes(ti)
@@ -122,6 +136,7 @@ export class Board{
             t.nodes = nodes.map(ni=>this.game_state.nodes[ni])
             t.nodes.forEach(n=>n.tiles.push(t))
         })
+
     }
     makeEdge(n1:node, n2:node):edge|null{
         if(n1.edges.some(e=>e.nodes.find(v=>v===n2)!== undefined)) return null
@@ -185,3 +200,5 @@ for(let i = 0; i<19; i++){
 //console.log(arr)
 console.log(board.tile_layout.map(t=>t.nodes.map(n=>n.index)))
 //console.log(board.game_state.nodes.map((n, i)=>i+" : "+n.tiles.map(t=>board.tile_layout.indexOf(t))))
+for(let i = 0; i<52; i++)
+    console.log(board.harbor_nodes[i])
