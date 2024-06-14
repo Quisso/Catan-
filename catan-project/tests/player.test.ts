@@ -1,4 +1,4 @@
-
+//test
 import { Hex, Resource } from "../src/main";
 import { randomize, developement_Cards, Player } from '../src/player.ts';
 

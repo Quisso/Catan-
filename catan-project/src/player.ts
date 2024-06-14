@@ -1,3 +1,5 @@
+//holds player and cards
+
 import { Hex, Resource, edge, node } from "./main";
 
 export function randomize(arr: any[], size: number): any[]{
