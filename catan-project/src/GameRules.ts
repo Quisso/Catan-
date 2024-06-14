@@ -1,4 +1,4 @@
-import {Board,node, settlement} from './main';  
+import {Board,node, settlement,edge} from './main';  
 import {Player} from './Player';
 
 class GameRules{
@@ -11,16 +11,18 @@ class GameRules{
         let node:node;
         return tile.some(e => tile_nodes[e].settlement !== null)
     }
-    
+    check_Empty_Intersection(tile:number[],tile_nodes:node[]): boolean{
+        let node:node;
+        return tile.some(e => tile_nodes[e].settlement === null)
+    }
     
     // Gives the resorsse with the sum of the role
-    ResoureProduction(dice_1:number, dice_2:number){
+    ResoureProduction(dice_1:number, dice_2:number, player:Player){
         this.dice_1  = Math.floor(Math.random() * 6) + 1;
         this.dice_2 = Math.floor(Math.random() * 6) + 1;
         const sum_Of_Dice = this.dice_1 + this.dice_2;
 
         const board = new Board(3);
-        const player  = new Player();
 
         function findSettlement(nodeIndex: number): settlement | null {
             const node = board.game_state.nodes[nodeIndex];
@@ -37,37 +39,37 @@ class GameRules{
             condition ? player.increment_resource(player.settlement_count,tile.resource) : null;
             break;
             case 2: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 3: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 4: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 5: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 6: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 7: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 8: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 9: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 10: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             case 11: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break; 
             case 12: 
-            condition ? player.increment_resource(2,tile.resource) : tile ? player.increment_resource(1,tile.resource):null
+            condition ? player.increment_resource(player.settlement_count,tile.resource):null;
             break;
             default: Error("Non - Tile");
         }
@@ -75,15 +77,17 @@ class GameRules{
 
     }
 
-    trade(_player_turn){
+    /*  trade(player:Player){
 
 
-    }
+    }**/
 
-    buildRoad() {
+   /* buildRoad(player:Player) {
         const board = new Board(3);
+        const tile_nodes = board.getTileNodes(input);
 
-        if(this.checkIntersection(input,board.getTileNodes)){
+        if(this.checkIntersection(tile_nodes,board.game_state.nodes)){
+            tile_nodes.some(e => this.check_Empty_Intersection(e,board.game_state.nodes))
             
         }
 
@@ -91,12 +95,7 @@ class GameRules{
         
     }
 
-     \
+     **/
 
     }
 
-    
-
-
-
-}
