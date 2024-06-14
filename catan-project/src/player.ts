@@ -1,4 +1,4 @@
-import { Resource , Color } from "../include/catan"
+import { shuffleArray , Resource , Color } from "../include/catan"
 
 // enum differentcards_developement { //25 cards = 14 Soldier + 6 Progress + 5 Victory
 //     Soldier, Progress, Victory
@@ -20,10 +20,10 @@ import { Resource , Color } from "../include/catan"
 
 let deck = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
 
-class developement_Cards {
+export class developement_Cards {
     cardsInHand_developement: number[];
     
-    constructor(color:Color) {
+    constructor() {
         this.cardsInHand_developement = [];
     }
 
@@ -59,22 +59,22 @@ class developement_Cards {
 }
 
 export class Player{
-    resources: { [key in Resource]: number };
+    resources: Record<Resource, number>
     settlement_count: number;
     roads_count: number;
     roads_location: number[];
     victory_points: number
+    color: Color
 
 
-    constructor() { //if player are in these terrain add to resources
+    constructor(color:Color) { 
+        this.color = color
         this.resources = {
             [Resource.brick]: 0,
             [Resource.wood]: 0,
             [Resource.ore]: 0,
             [Resource.wheat]: 0,
             [Resource.sheep]: 0,
-            [Resource.random]: 0,
-            [Resource.nothing]:0
         };
         
         this.settlement_count = 0;
@@ -82,7 +82,7 @@ export class Player{
         this.roads_location = [];
         this.victory_points = 0
     }
-
+    //if player are in these terrain add to resources
     increment_resource(num: number, territorytype: Resource){
         this.resources[territorytype] += num;
     }
@@ -94,8 +94,20 @@ export class Player{
     roadscounter(){ 
         this.roads_count++;
     }
-    toString(){
-        return ""
+    toStringHand(){
+        return "\n"+
+        "Brick: " + this.resources[Resource.brick]+"\n"+
+        "Wood: " + this.resources[Resource.wood]+"\n"+
+        "Ore: " + this.resources[Resource.ore]+"\n"+
+        "Wheat: " + this.resources[Resource.wheat]+"\n"+
+        "Sheep: " + this.resources[Resource.sheep]+"\n"+
+        +"\n"
+    }
+    toString():string{
+        return "\n"+
+        "Color: " + this.color + 
+        "\nVictory Points: " + this.victory_points + 
+        "\nResources: " + this.toStringHand()
     }
 
 }

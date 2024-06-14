@@ -1,20 +1,16 @@
-import { shuffleArray , Resource , Color } from "../include/catan"
+import { shuffleArray , Resource , Color , settlement } from "../include/catan"
 
-enum Hex { hills , forest , mountain , fields , pasture , desert, harbor }
 
+enum Hex { hills , forest , mountain , fields , pasture , desert }
 type tile = {
     hex: Hex
     resource: Resource
     token: number
     nodes: node[]
 }
-type settlement = {
-    color: Color//player
-    is_city: boolean
-}
 type node = {
     settlement: settlement | null
-    harbor: Resource | null
+    harbor: Resource | Resource[] | null
     tiles: tile[]
     edges: edge[]
     index: number
@@ -59,14 +55,15 @@ export class Board{
     private node_rows = [7, 9, 11, 11, 9, 7]
 
     harbor_amt = 18;
-    private harbor_nodes:  Record<number, Resource> = {
-        0: Resource.random, 1: Resource.random,
+    all_resources:Resource[] = Object.values(Resource).map(r=> r as Resource)
+    private harbor_nodes:  Record<number, Resource | Resource[]> = {
+        0: this.all_resources, 1: this.all_resources,
         3: Resource.sheep, 4: Resource.sheep,
-        7: Resource.random, 14: Resource.random,
-        15: Resource.random, 17: Resource.random,
+        7: this.all_resources, 14: this.all_resources,
+        15: this.all_resources, 17: this.all_resources,
         26: Resource.brick, 28: Resource.brick,
         37: Resource.wood, 38: Resource.wood,
-        45: Resource.random, 46: Resource.random,
+        45: this.all_resources, 46: this.all_resources,
         47: Resource.wheat, 48: Resource.wheat,
         50: Resource.ore, 51: Resource.ore,
     }
