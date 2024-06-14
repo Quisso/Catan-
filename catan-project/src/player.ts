@@ -115,4 +115,3 @@ export class Player{
 function randomize(deck: number[], length: number) {
     throw new Error("Function not implemented.");
 }
-
