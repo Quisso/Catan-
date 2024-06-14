@@ -1,4 +1,4 @@
-export enum Hex { hills , forest , mountain , fields , pasture , desert, harbor }
+export enum Hex { hills , forest , mountain , fields , pasture , desert, harbor, invalid }
 export enum Resource { brick , wood , ore , wheat , sheep , nothing , random }
 export enum Color { red , white , orange , blue}
 export type tile = {
