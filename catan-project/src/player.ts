@@ -1,5 +1,4 @@
-import { Resource } from "./main";
-
+import { Resource , Color } from "../include/catan"
 
 // enum differentcards_developement { //25 cards = 14 Soldier + 6 Progress + 5 Victory
 //     Soldier, Progress, Victory
@@ -18,19 +17,13 @@ import { Resource } from "./main";
 //     }
 // } 
 
-//card effect
-type card = {
-    name:string;
-    description: string;
-    function: () => void;
-}
 
 let deck = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
 
 class developement_Cards {
     cardsInHand_developement: number[];
     
-    constructor() {
+    constructor(color:Color) {
         this.cardsInHand_developement = [];
     }
 
@@ -70,6 +63,7 @@ export class Player{
     settlement_count: number;
     roads_count: number;
     roads_location: number[];
+    victory_points: number
 
 
     constructor() { //if player are in these terrain add to resources
@@ -86,7 +80,7 @@ export class Player{
         this.settlement_count = 0;
         this.roads_count = 0;
         this.roads_location = [];
-    
+        this.victory_points = 0
     }
 
     increment_resource(num: number, territorytype: Resource){
@@ -100,7 +94,9 @@ export class Player{
     roadscounter(){ 
         this.roads_count++;
     }
-
+    toString(){
+        return ""
+    }
 
 }
 
