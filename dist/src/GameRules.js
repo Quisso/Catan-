@@ -1,32 +1,29 @@
-import { shuffleArray , Resource , Color , settlement} from "../include/catan"
-import { Board } from './board';  
-import { Player } from './player';
-let colors = [Color.blue, Color.orange, Color.red, Color.white]
-export class GameRules{
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameRules = void 0;
+const catan_1 = require("../include/catan");
+const board_1 = require("./board");
+const player_1 = require("./player");
+let colors = [catan_1.Color.blue, catan_1.Color.orange, catan_1.Color.red, catan_1.Color.white];
+class GameRules {
     dice_1 = 0;
     dice_2 = 0;
-    
-    player_amt:number
-    players:Player[]
-
-    constructor(player_amt:number){
-        this.player_amt = player_amt
-        
-        this.players = Array.from({length:4})
-        .map((_, pi)=>({player: new Player(colors[pi]), dice:this.roll_dice()}))
-        .sort((a, b)=> a.dice - b.dice)
-        .map(pwd=>pwd.player)
-        console.log(this.players)
+    player_amt;
+    players;
+    constructor(player_amt) {
+        this.player_amt = player_amt;
+        this.players = Array.from({ length: 4 })
+            .map((_, pi) => ({ player: new player_1.Player(colors[pi]), dice: this.roll_dice() }))
+            .sort((a, b) => a.dice - b.dice)
+            .map(pwd => pwd.player);
+        console.log(this.players);
     }
-    roll_dice():number{
-        let die = (rand:number)=> Math.floor(rand * 6) + 1
-        return die(Math.random()) + die(Math.random())
+    roll_dice() {
+        let die = (rand) => Math.floor(rand * 6) + 1;
+        return die(Math.random()) + die(Math.random());
     }
-
-    playerTurn(player:Player){
-
+    playerTurn(player) {
     }
-
     // checkIntersection(tile:number[],tile_nodes:node[]): boolean{
     //     let node:node;
     //     return tile.some(e => tile_nodes[e].settlement !== null)
@@ -35,24 +32,18 @@ export class GameRules{
     //     let node:node;
     //     return tile.some(e => tile_nodes[e].settlement === null)
     // }
-    
-    
     // Gives the resorsse with the sum of the role
-    ResoureProduction(dice_1:number, dice_2:number, player:Player){
-        this.dice_1  = Math.floor(Math.random() * 6) + 1;
+    ResoureProduction(dice_1, dice_2, player) {
+        this.dice_1 = Math.floor(Math.random() * 6) + 1;
         this.dice_2 = Math.floor(Math.random() * 6) + 1;
         const sum_Of_Dice = this.dice_1 + this.dice_2;
-
-        const board = new Board();
-
+        const board = new board_1.Board();
         // function findSettlement(nodeIndex: number): settlement | null {
         //     const node = board.game_state.nodes[nodeIndex];
         //     return node.settlement;
         // }
-
         // const condition = this.checkIntersection(board.getTileNodes(sum_Of_Dice),board.game_state.nodes);
         // const tile = board.tile_layout[sum_Of_Dice];
-
         // //based on the roll and the sum of the rolls it checks the intersection for a settlement and the rolls to give out resources
         // //  for now - settlement  
         // switch(sum_Of_Dice){
@@ -94,29 +85,6 @@ export class GameRules{
         //     break;
         //     default: Error("Non - Tile");
         // }
-
-
     }
-
-    /*  trade(player:Player){
-
-
-    }**/
-
-   /* buildRoad(player:Player) {
-        const board = new Board(3);
-        const tile_nodes = board.getTileNodes(input);
-
-        if(this.checkIntersection(tile_nodes,board.game_state.nodes)){
-            tile_nodes.some(e => this.check_Empty_Intersection(e,board.game_state.nodes))
-            
-        }
-
-        
-        
-    }
-
-     **/
-
-    }
-
+}
+exports.GameRules = GameRules;
