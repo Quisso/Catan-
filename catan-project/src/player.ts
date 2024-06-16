@@ -25,13 +25,93 @@ type card = {
     function: () => void;
 }
 
-let deck = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
+let deck: any = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
 
-class developement_Cards {
-    cardsInHand_developement: number[];
-    
+export class developement_Cards {
+    cardsInHand_developement: card[];
+    knight: card;
+    progress1: card;
+    progress2: card;
+    progress3: card;
+    victory: card;
+
     constructor() {
         this.cardsInHand_developement = [];
+        this.knight = {
+            name: "knight card",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+
+        this.progress1 = {
+            name: "Road building card",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+
+        this.progress2 = {
+            name: "Year of Plenty card",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+
+        this.progress3 = {
+            name: "Monopoly",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+
+        this.victory = {
+            name: "victory card",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+
+        this.knight = {
+            name: "knight",
+            description: "",
+            function: () =>{
+                
+            }
+        };
+        
+        let swapdeck = (knight: card, progress1: card, progres2: card, progress3: card, victory: card) => {
+            let p1count = 0;
+            let p2count = 0;
+            let p3count = 0;
+            deck.forEach((number: number, index: number) => {
+
+                if(number === 1){
+                    deck[index] = knight;
+                }else if(number === 2){
+                    //random progress card??
+                    //or only selective 3
+                    if(p1count !== 2){
+                        deck[index] = progress1;
+                        p1count++;
+                    }else if (p2count !== 2){   
+                        deck[index] = progres2;
+                        p2count++;
+                    }else if(p3count !== 2){
+                        deck[index] = progress3;
+                        p3count++;
+                    }
+                }else if(number === 3){
+                    deck[index] = victory;
+                }
+            });
+        };
+
     }
 
     Drawhand_developement(nums: number) {
@@ -60,7 +140,7 @@ class developement_Cards {
 
 
 
-    getCards(): number[] {
+    getCards(): card[] {
         return this.cardsInHand_developement;
     }
 }
@@ -104,7 +184,7 @@ export class Player{
 
 }
 
-function randomize(deck: number[], length: number) {
+export function randomize(deck: number[], length: number) {
     throw new Error("Function not implemented.");
 }
 
