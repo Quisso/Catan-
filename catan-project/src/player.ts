@@ -1,4 +1,5 @@
-import { shuffleArray , Resource , Color } from "../include/catan"
+import { Resource } from "./main";
+
 
 // enum differentcards_developement { //25 cards = 14 Soldier + 6 Progress + 5 Victory
 //     Soldier, Progress, Victory
@@ -17,10 +18,16 @@ import { shuffleArray , Resource , Color } from "../include/catan"
 //     }
 // } 
 
+//card effect
+type card = {
+    name:string;
+    description: string;
+    function: () => void;
+}
 
 let deck = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3]; // 1 = knight, 2 = progress, 3 = victory
 
-export class developement_Cards {
+class developement_Cards {
     cardsInHand_developement: number[];
     
     constructor() {
@@ -59,30 +66,29 @@ export class developement_Cards {
 }
 
 export class Player{
-    resources: Record<Resource, number>
+    resources: { [key in Resource]: number };
     settlement_count: number;
     roads_count: number;
     roads_location: number[];
-    victory_points: number
-    color: Color
 
 
-    constructor(color:Color) { 
-        this.color = color
+    constructor() { //if player are in these terrain add to resources
         this.resources = {
             [Resource.brick]: 0,
             [Resource.wood]: 0,
             [Resource.ore]: 0,
             [Resource.wheat]: 0,
             [Resource.sheep]: 0,
+            [Resource.random]: 0,
+            [Resource.nothing]:0
         };
         
         this.settlement_count = 0;
         this.roads_count = 0;
         this.roads_location = [];
-        this.victory_points = 0
+    
     }
-    //if player are in these terrain add to resources
+
     increment_resource(num: number, territorytype: Resource){
         this.resources[territorytype] += num;
     }
@@ -94,24 +100,11 @@ export class Player{
     roadscounter(){ 
         this.roads_count++;
     }
-    toStringHand(){
-        return "\n"+
-        "Brick: " + this.resources[Resource.brick]+"\n"+
-        "Wood: " + this.resources[Resource.wood]+"\n"+
-        "Ore: " + this.resources[Resource.ore]+"\n"+
-        "Wheat: " + this.resources[Resource.wheat]+"\n"+
-        "Sheep: " + this.resources[Resource.sheep]+"\n"+
-        +"\n"
-    }
-    toString():string{
-        return "\n"+
-        "Color: " + this.color + 
-        "\nVictory Points: " + this.victory_points + 
-        "\nResources: " + this.toStringHand()
-    }
+
 
 }
 
 function randomize(deck: number[], length: number) {
     throw new Error("Function not implemented.");
 }
+
